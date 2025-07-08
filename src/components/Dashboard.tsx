@@ -8,7 +8,6 @@ import { GoalsPanel } from './GoalsPanel';
 import { RecipeTimetable } from './RecipeTimetable';
 import { calculateBMI, generateHealthPrediction, generateMentalHealthScore } from '../utils/healthCalculations';
 import { ProfileEdit } from './ProfileEdit';
-import { Chatbot } from './Chatbot';
 
 interface DashboardProps {
   user: User;
@@ -20,7 +19,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, onUpdateUs
   const [healthMetrics, setHealthMetrics] = useState<HealthMetrics[]>([]);
   const [mentalWellness, setMentalWellness] = useState<MentalWellness[]>([]);
   const [predictions, setPredictions] = useState<Prediction[]>([]);
-  const [activeTab, setActiveTab] = useState<'overview' | 'mental' | 'predictions' | 'goals' | 'recipes' | 'chatbot'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'mental' | 'predictions' | 'goals' | 'recipes'>('overview');
   const [showProfileEdit, setShowProfileEdit] = useState(false);
 
   useEffect(() => {
@@ -85,7 +84,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, onUpdateUs
             { id: 'predictions', label: 'Predictions', icon: '🔮' },
             { id: 'goals', label: 'Goals', icon: '🎯' },
             { id: 'recipes', label: 'Recipes', icon: '🍲' },
-            { id: 'chatbot', label: 'Chatbot', icon: '💬' }
+            // Chatbot tab removed
           ].map(tab => (
             <button
               key={tab.id}
@@ -141,12 +140,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, onUpdateUs
             </div>
           )}
 
-          {activeTab === 'chatbot' && (
-            <div className="bg-white rounded-xl shadow p-6">
-              <h2 className="text-2xl font-bold mb-4 text-black">Mental Wellness Chatbot</h2>
-              <Chatbot />
-            </div>
-          )}
+          {/* Chatbot tab removed */}
         </div>
       </div>
       {/* Profile Edit Modal Placeholder */}
