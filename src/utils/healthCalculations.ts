@@ -43,7 +43,7 @@ export const generateHealthPrediction = (
     recommendations.push('Consult a healthcare provider for weight management');
     recommendations.push('Consider a structured diet and exercise program');
   } else if (bmi >= 25) {
-    riskLevel = riskLevel === 'high' ? 'high' : 'medium';
+    if (riskLevel !== 'high') riskLevel = 'medium';
     factors.push('BMI indicates overweight');
     recommendations.push('Focus on balanced nutrition and regular exercise');
   }
@@ -55,7 +55,7 @@ export const generateHealthPrediction = (
     recommendations.push('Consider speaking with a mental health professional');
     recommendations.push('Practice mindfulness and stress reduction techniques');
   } else if (avgMood < 6) {
-    riskLevel = riskLevel === 'high' ? 'high' : 'medium';
+    if (riskLevel !== 'high') riskLevel = 'medium';
     factors.push('Below average mood ratings');
     recommendations.push('Engage in activities that boost mood and energy');
   }
@@ -69,7 +69,7 @@ export const generateHealthPrediction = (
   
   // Activity level assessment
   if (user.activityLevel === 'sedentary') {
-    riskLevel = riskLevel === 'high' ? 'high' : 'medium';
+    if (riskLevel !== 'high') riskLevel = 'medium';
     factors.push('Sedentary lifestyle');
     recommendations.push('Gradually increase physical activity');
     recommendations.push('Aim for at least 150 minutes of moderate exercise weekly');
@@ -81,7 +81,47 @@ export const generateHealthPrediction = (
     recommendations.push('Continue regular health monitoring');
     recommendations.push('Stay hydrated and get adequate sleep');
   }
-  
+
+  // --- Dynamic Confidence Calculation ---
+  // 1. Data completeness (more entries = higher confidence)
+  const maxEntries = 30; // arbitrary, for normalization
+  const healthDataScore = Math.min(metrics.length / maxEntries, 1);
+  const wellnessDataScore = Math.min(wellness.length / maxEntries, 1);
+
+  // 2. Recency (latest entry within 7 days)
+  let recencyScore = 0.5;
+  const now = new Date();
+  if (latestMetrics && latestWellness) {
+    const daysSinceMetric = (now.getTime() - new Date(latestMetrics.date).getTime()) / (1000 * 60 * 60 * 24);
+    const daysSinceWellness = (now.getTime() - new Date(latestWellness.date).getTime()) / (1000 * 60 * 60 * 24);
+    recencyScore = (daysSinceMetric <= 7 && daysSinceWellness <= 7) ? 1 : 0.5;
+  }
+
+  // 3. Consistency (lower variance = higher confidence)
+  function variance(arr: number[]): number {
+    if (arr.length === 0) return 0;
+    const mean = arr.reduce((a, b) => a + b, 0) / arr.length;
+    return arr.reduce((sum, v) => sum + Math.pow(v - mean, 2), 0) / arr.length;
+  }
+  const moodVariance = variance(wellness.map(w => w.mood));
+  const stressVariance = variance(wellness.map(w => w.stressLevel));
+  // Normalize: lower variance (<=2) = 1, higher variance (>=8) = 0
+  const consistencyScore = 1 - Math.min((moodVariance + stressVariance) / 16, 1);
+
+  // 4. Number of risk factors (more = lower confidence)
+  const riskFactorPenalty = Math.max(0, 1 - (factors.length / 6)); // 6+ factors = 0
+
+  // Combine all (weighted average)
+  confidence = (
+    0.25 * healthDataScore +
+    0.25 * wellnessDataScore +
+    0.2 * recencyScore +
+    0.2 * consistencyScore +
+    0.1 * riskFactorPenalty
+  );
+  // Clamp between 0.5 and 0.99
+  confidence = Math.max(0.5, Math.min(confidence, 0.99));
+
   return {
     id: Date.now().toString(),
     userId: user.id,

@@ -1,12 +1,44 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
 body {
-  font-family: 'Poppins', 'Inter', 'Segoe UI', Arial, sans-serif;
-  background: linear-gradient(135deg, #e0e7ff 0%, #f0fdfa 100%);
+  font-family: 'Poppins', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  background: linear-gradient(135deg, #FFF8F1 0%, #FFEBEE 100%);
   min-height: 100vh;
   color: #222;
   position: relative;
   overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 700;
+}
+
+.card, .bg-white, .rounded-xl, .rounded-lg {
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 2px 16px rgba(255, 109, 0, 0.08), 0 1.5px 6px rgba(44, 62, 80, 0.04);
+}
+
+button, .btn {
+  font-family: 'Poppins', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  background: linear-gradient(90deg, #FF6D00 0%, #EC4899 100%);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(255, 109, 0, 0.10);
+  transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+}
+button:hover, .btn:hover {
+  background: linear-gradient(90deg, #EC4899 0%, #FF6D00 100%);
+  box-shadow: 0 4px 16px rgba(255, 109, 0, 0.18);
+  transform: translateY(-2px) scale(1.03);
+}
+
+.nav, .navigation, .tab-bar {
+  background: #fff8f1;
+  border-radius: 1rem;
+  box-shadow: 0 2px 12px rgba(255, 109, 0, 0.06);
 }
 
 /* 3D animated gradient background */
@@ -119,6 +151,7 @@ body::before {
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
+  background: #F3F4F6;
 }
 
 ::-webkit-scrollbar-track {
@@ -127,8 +160,8 @@ body::before {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(45deg, #8b5cf6, #06b6d4);
-  border-radius: 10px;
+  background: #FF6D00;
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {

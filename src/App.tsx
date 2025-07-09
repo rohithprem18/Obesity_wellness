@@ -3,6 +3,7 @@ import { LoginForm } from './components/LoginForm';
 import { RegisterForm } from './components/RegisterForm';
 import { Dashboard } from './components/Dashboard';
 import { useAuth } from './hooks/useAuth';
+import Chatbot from './components/Chatbot';
 
 function App() {
   const { user: authUser, isLoading, login, register, logout } = useAuth();
@@ -38,6 +39,7 @@ function App() {
         <div className="glass-3d p-10 w-full max-w-md mx-auto text-center animate-fade-in">
           <div className="text-gray-900 text-xl font-semibold">Loading...</div>
         </div>
+        <Chatbot />
       </div>
     );
   }
@@ -49,6 +51,7 @@ function App() {
         <div className="glass-3d max-w-7xl mx-auto my-8 p-4 md:p-8 animate-fade-in">
           <Dashboard user={user} onLogout={logout} onUpdateUser={handleUpdateUser} />
         </div>
+        <Chatbot />
       </div>
     );
   }
@@ -102,6 +105,7 @@ function App() {
           </div>
         </div>
       </div>
+      <Chatbot />
     </div>
   );
 }

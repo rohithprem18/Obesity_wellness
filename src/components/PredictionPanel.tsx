@@ -1,19 +1,22 @@
 import React from 'react';
 import { AlertTriangle, CheckCircle, TrendingUp, Brain, Heart } from 'lucide-react';
 import { User, HealthMetrics, MentalWellness, Prediction } from '../types';
+import Chatbot, { ChatbotPanel } from './Chatbot';
 
 interface PredictionPanelProps {
   predictions: Prediction[];
   user: User;
   healthMetrics: HealthMetrics[];
   mentalWellness: MentalWellness[];
+  onAddWellnessEntry?: (entry: Omit<MentalWellness, 'id' | 'userId' | 'date'>) => void;
 }
 
 export const PredictionPanel: React.FC<PredictionPanelProps> = ({
   predictions,
   user,
   healthMetrics,
-  mentalWellness
+  mentalWellness,
+  onAddWellnessEntry
 }) => {
   const latestPrediction = predictions[predictions.length - 1];
 
@@ -78,6 +81,7 @@ export const PredictionPanel: React.FC<PredictionPanelProps> = ({
 
   return (
     <div className="space-y-6">
+      {/* Chatbot Panel for Health Risk Assessment */}
       {/* Risk Assessment Card */}
       {latestPrediction && (
         <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
